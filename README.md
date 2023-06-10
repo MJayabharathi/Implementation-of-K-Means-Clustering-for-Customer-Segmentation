@@ -1,83 +1,95 @@
-# Implementation-of-SVM-For-Spam-Mail-Detection
+# Implementation-of-K-Means-Clustering-for-Customer-Segmentation
 
 ## AIM:
-To write a program to implement the SVM For Spam Mail Detection.
+To write a program to implement the K Means Clustering for Customer Segmentation.
 
 ## Equipments Required:
 1. Hardware – PCs
 2. Anaconda – Python 3.7 Installation / Jupyter notebook
 
 ## Algorithm
-1. Import the necessary packages.  
-2. Read the given csv file and display the few contents of the data.  
-3. Assign the features for x and y respectively.  
-4. Split the x and y sets into train and test sets.  
-5. Convert the Alphabetical data to numeric using CountVectorizer.  
-6. Predict the number of spam in the data using SVC (C-Support Vector Classification) method of SVM (Support vector machine) in sklearn library.  
-7. Find the accuracy of the model.  
+1. Import standard libraries in python for finding Implementation-of-K-Means-Clustering-for-Customer-Segmentation.
+2. Initialize and print the Data.head(),data.info(),data.isnull().sum()
+3. Import sklearn.cluster import KMeans
+4. calculate the value of  KMeans Clusters.
+5. plot the graph from Elbow method and find y_pred values .  
+6. plot the graph from Customer Segments Graph.
 
 ## Program:
 ```txt
-Program to implement the SVM For Spam Mail Detection..
-Developed by: Jayabharathi M
+Program to implement the K Means Clustering for Customer Segmentation.
+Developed by:  Jayabharathi M
 RegisterNumber:  212220220017
 ```
 ```py3
-print("Result Output:")
-import chardet 
-file='/content/spam.csv'
-with open(file, 'rb') as rawdata:
-  result = chardet.detect(rawdata.read(100000))
-result
-```
-```py3
 import pandas as pd
-data=pd.read_csv("/content/spam.csv",encoding='Windows-1252')
-print("data head:")
+import matplotlib.pyplot as plt
+data = pd.read_csv("/content/Mall_Customers (1).csv")
+print("data.head():")
 data.head()
-```
-```py3
-print("data info:")
+print("data.info():")
 data.info()
 ```
 ```py3
-print("data isnull:")
+print("data.isnull().sum():")
 data.isnull().sum()
+from sklearn.cluster import KMeans
+wcss = []
 ```
 ```py3
-x=data["v1"].values
-y=data["v2"].values
+for i in range (1,11):
+    kmeans = KMeans(n_clusters = i,init = "k-means++")
+    kmeans.fit(data.iloc[:,3:])
+    wcss.append(kmeans.inertia_)
 ```
 ```py3
-from sklearn.model_selection import train_test_split
-x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.2,random_state=0)
-from sklearn.feature_extraction.text import CountVectorizer
-cv = CountVectorizer()
-x_train = cv.fit_transform(x_train)
-x_test = cv.transform(x_test)
-print("y_prediction  value:")
+print("Elbow Method Graph:")
+plt.plot(range(1,11),wcss)
+plt.xlabel("No. of Clusters")
+plt.ylabel("wcss")
+plt.title("Elbow Method")
 ```
 ```py3
-from sklearn.svm import SVC
-svc=SVC()
-svc.fit(x_train,y_train)
-y_pred = svc.predict(x_test)
+print("KMeans cluster value:")
+km = KMeans(n_clusters = 5)
+km.fit(data.iloc[:,3:])
+```
+```py3
+print("y_pred:")
+y_pred = km.predict(data.iloc[:,3:])
 y_pred
-print("Accuracy Value:")
 ```
 ```py3
-from sklearn import metrics
-accuracy = metrics.accuracy_score(y_test,y_pred)
-accuracy
+print("Customer Segments Graph:")
+data["cluster"] = y_pred
+df0=data[data["cluster"]==0]
+df1=data[data["cluster"]==1]
+df2=data[data["cluster"]==2]
+df3=data[data["cluster"]==3]
+df4=data[data["cluster"]==4]
+plt.scatter(df0["Annual Income (k$)"],df0["Spending Score (1-100)"],c="red",label="cluster0")
+plt.scatter(df1["Annual Income (k$)"],df1["Spending Score (1-100)"],c="black",label="cluster1")
+plt.scatter(df2["Annual Income (k$)"],df2["Spending Score (1-100)"],c="blue",label="cluster2")
+plt.scatter(df3["Annual Income (k$)"],df3["Spending Score (1-100)"],c="green",label="cluster3")
+plt.scatter(df4["Annual Income (k$)"],df4["Spending Score (1-100)"],c="yellow",label="cluster4")
+plt.legend()
+plt.title("Customer Segments")
 ```
 
 ## Output:
-![image](https://github.com/Dhanush12022004/Implementation-of-SVM-For-Spam-Mail-Detection/assets/128135558/98d6402d-65d4-4322-8fa0-9d3dca2dc3e0)
-![image](https://github.com/Dhanush12022004/Implementation-of-SVM-For-Spam-Mail-Detection/assets/128135558/cd750f0f-c118-448a-a4b7-b9e552cd7f48)
-![image](https://github.com/Dhanush12022004/Implementation-of-SVM-For-Spam-Mail-Detection/assets/128135558/669425c1-ad85-4052-a5cf-22fccaf3e40c)
-![image](https://github.com/Dhanush12022004/Implementation-of-SVM-For-Spam-Mail-Detection/assets/128135558/01826e8f-0504-4042-8b12-781c43f62bab)
-![image](https://github.com/Dhanush12022004/Implementation-of-SVM-For-Spam-Mail-Detection/assets/128135558/af49926b-1c7c-43e2-9ddf-6621f0a2d3f0)
-![image](https://github.com/Dhanush12022004/Implementation-of-SVM-For-Spam-Mail-Detection/assets/128135558/c3fa6109-f0c3-401a-a7fb-41f939df9ea4)
+![image](https://github.com/Yugendaran/Implementation-of-K-Means-Clustering-for-Customer-Segmentation/assets/128135616/6e89e8cd-b661-4029-8c1d-5c6fc8421a72)
+
+![image](https://github.com/Yugendaran/Implementation-of-K-Means-Clustering-for-Customer-Segmentation/assets/128135616/2044fa08-4dec-418d-b6e4-4d754d69dc0b)
+
+![image](https://github.com/Yugendaran/Implementation-of-K-Means-Clustering-for-Customer-Segmentation/assets/128135616/a16f664f-d77e-4019-aac2-9d6f79605c0c)
+
+![image](https://github.com/Yugendaran/Implementation-of-K-Means-Clustering-for-Customer-Segmentation/assets/128135616/f185f86d-188e-4fa2-8fb4-4865845df531)
+
+![image](https://github.com/Yugendaran/Implementation-of-K-Means-Clustering-for-Customer-Segmentation/assets/128135616/a1eb4456-65b9-4507-a5f7-cca30b726fdc)
+
+![image](https://github.com/Yugendaran/Implementation-of-K-Means-Clustering-for-Customer-Segmentation/assets/128135616/9c3b2405-16d9-4c1a-a5e9-dcd8cf6a7e8a)
+
+![image](https://github.com/Yugendaran/Implementation-of-K-Means-Clustering-for-Customer-Segmentation/assets/128135616/401de1d5-4102-4836-ace2-4ae4529bde6b)
 
 ## Result:
-Thus the program to implement the SVM For Spam Mail Detection is written and verified using python programming.
+Thus the program to implement the K Means Clustering for Customer Segmentation is written and verified using python programming.
